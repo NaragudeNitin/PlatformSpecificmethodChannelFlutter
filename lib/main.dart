@@ -6,10 +6,6 @@ void main() {
   runApp(
     const MaterialApp(
       home: MyApp(),
-      // Set the text direction here (TextDirection.ltr or TextDirection.rtl)
-      // based on your app's requirements.
-      // For example, if your app uses left-to-right (LTR) text direction:
-      // textDirection: TextDirection.ltr,
     ),
   );
 }
@@ -24,7 +20,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   static const platform = MethodChannel("samples.flutter.dev/battery");
 
-  // Get battery level.
+  // Get battery using value notifier we are declaring it here.
   final ValueNotifier<String> _batteryLevelNotifier =
       ValueNotifier<String>('Unknown battery level.');
   late Timer _timer;
@@ -33,7 +29,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    // Start the periodic timer to update the battery level every 5 seconds.
+    // Starts the periodic timer to update the battery level every seconds.
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _getBatteryLevel();
     });
@@ -41,11 +37,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
+    //disposing the timer and battery notifier after every call
     _batteryLevelNotifier.dispose();
     _timer.cancel();
     super.dispose();
   }
 
+  // this os the method to call battery percentage according to platform
   Future<void> _getBatteryLevel() async {
     String batteryLevel;
     try {
